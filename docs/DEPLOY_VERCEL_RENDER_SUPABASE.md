@@ -48,7 +48,7 @@ Redis is optional (in-memory rate limits on one Render instance).
 | `ADMIN_API_KEY` | Long random secret (`openssl rand -hex 32`) |
 | `CORS_ORIGINS` | `https://YOUR_APP.vercel.app` (add custom domain later) |
 | `LLM_PROVIDER` | `gemini` |
-| `LLM_MODEL` | `gemini-2.0-flash` |
+| `LLM_MODEL` | `gemini-3.6-flash` |
 | `EMBEDDING_PROVIDER` | `gemini` |
 | `EMBEDDING_MODEL` | `gemini-embedding-001` |
 | `EMBEDDING_DIMENSIONS` | `1536` |
