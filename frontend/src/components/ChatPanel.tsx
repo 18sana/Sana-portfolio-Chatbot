@@ -168,34 +168,42 @@ export function ChatPanel({ onBookMeet }: Props) {
               {msg.content}
             </div>
             {msg.citations && msg.citations.length > 0 ? (
-              <div className="mt-3 space-y-2">
-                {msg.citations.map((c) => {
-                  const open = openCitation === c.chunk_id;
-                  return (
-                    <div
-                      key={c.chunk_id}
-                      className="rounded-xl border border-[var(--line)] bg-[var(--bg)] overflow-hidden"
-                    >
+              <div className="mt-3">
+                <div className="text-[0.62rem] uppercase tracking-[0.16em] text-[var(--muted)] mb-1.5">
+                  Sources
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {msg.citations.map((c) => {
+                    const open = openCitation === c.chunk_id;
+                    const label = c.section_title || c.source_title || "Source";
+                    return (
                       <button
+                        key={c.chunk_id}
                         type="button"
-                        className="w-full text-left px-3 py-2 text-sm flex justify-between gap-3 hover:bg-white transition-colors"
+                        title={c.snippet}
+                        className={[
+                          "max-w-full truncate rounded-full border px-2.5 py-1 text-xs font-semibold transition-colors",
+                          open
+                            ? "border-[var(--coral)] bg-[var(--coral-soft)] text-[var(--coral)]"
+                            : "border-[var(--line)] bg-[var(--bg)] text-[var(--ink-soft)] hover:border-[var(--coral)] hover:text-[var(--coral)]",
+                        ].join(" ")}
                         onClick={() => setOpenCitation(open ? null : c.chunk_id)}
                       >
-                        <span className="min-w-0 truncate">
-                          {c.section_title || c.source_title || "Source"}
-                        </span>
-                        <span className="text-[var(--coral)] text-xs font-semibold shrink-0">
-                          {open ? "Hide" : "Show"}
-                        </span>
+                        {label}
                       </button>
-                      {open ? (
-                        <p className="px-3 pb-3 text-sm text-[var(--muted)] leading-relaxed break-words">
-                          {c.snippet}
-                        </p>
-                      ) : null}
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
+                {msg.citations.map((c) =>
+                  openCitation === c.chunk_id ? (
+                    <p
+                      key={`${c.chunk_id}-snippet`}
+                      className="mt-2 rounded-xl border border-[var(--line)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--muted)] leading-relaxed break-words"
+                    >
+                      {c.snippet}
+                    </p>
+                  ) : null,
+                )}
               </div>
             ) : null}
           </article>

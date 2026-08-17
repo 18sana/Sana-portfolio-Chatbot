@@ -39,8 +39,9 @@ class ChatAgent:
     llm: LLMProvider
     embeddings: EmbeddingProvider
     session: AsyncSession
-    top_k: int = 8
-    verify_with_llm: bool = True
+    top_k: int = 6
+    verify_with_llm: bool = False
+    chat_max_tokens: int = 450
 
     async def retrieve_context(self, state: ChatState) -> ChatState:
         hits = await hybrid_search(
@@ -50,17 +51,7 @@ class ChatAgent:
             top_k=self.top_k,
         )
         retrieved = [_chunk_to_dict(h) for h in hits]
-        citations = [
-            {
-                "chunk_id": str(h.chunk_id),
-                "document_id": str(h.document_id),
-                "section_title": h.section_title,
-                "source_title": h.source_title,
-                "snippet": h.content[:280],
-                "score": h.score,
-            }
-            for h in hits
-        ]
+        citations = _select_citations(hits, limit=3)
         return {**state, "retrieved": retrieved, "citations": citations}
 
     async def compose_prompt(self, state: ChatState) -> ChatState:
@@ -76,7 +67,9 @@ class ChatAgent:
         return {**state, "messages": messages}
 
     async def generate_response(self, state: ChatState) -> ChatState:
-        result = await self.llm.complete(state["messages"], temperature=0.2)
+        result = await self.llm.complete(
+            state["messages"], temperature=0.2, max_tokens=self.chat_max_tokens
+        )
         return {
             **state,
             "answer": result.content,
@@ -205,7 +198,9 @@ class ChatAgent:
         state = await self.compose_prompt(state)
 
         parts: list[str] = []
-        async for chunk in self.llm.stream(state["messages"], temperature=0.2):
+        async for chunk in self.llm.stream(
+            state["messages"], temperature=0.2, max_tokens=self.chat_max_tokens
+        ):
             if chunk.content:
                 parts.append(chunk.content)
                 yield {"event": "token", "data": chunk.content}
@@ -223,6 +218,41 @@ class ChatAgent:
                 "unsupported_claims": state.get("unsupported_claims") or [],
             },
         }
+
+
+
+_META_CITATION_MARKERS = (
+    "how ash should",
+    "how ash answers",
+    "answer about projects",
+)
+
+
+def _select_citations(hits: Sequence[RetrievedChunk], *, limit: int = 3) -> list[dict[str, Any]]:
+    """Dedupe sources and drop meta/instruction chunks for a clean UI."""
+    out: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for h in hits:
+        title = (h.section_title or h.source_title or "").strip()
+        key = title.lower()
+        if not key or key in seen:
+            continue
+        if any(m in key for m in _META_CITATION_MARKERS):
+            continue
+        seen.add(key)
+        out.append(
+            {
+                "chunk_id": str(h.chunk_id),
+                "document_id": str(h.document_id),
+                "section_title": h.section_title,
+                "source_title": h.source_title,
+                "snippet": h.content[:220],
+                "score": h.score,
+            }
+        )
+        if len(out) >= limit:
+            break
+    return out
 
 
 def _chunk_to_dict(chunk: RetrievedChunk) -> dict[str, Any]:

@@ -106,4 +106,4 @@ Sana Asiwal builds full-stack products and AI agent systems: RAG platforms, mult
 
 ## How Ash should answer about projects
 
-When a recruiter asks “what have you built?”, lead with **intent + outcome**, then name 3–5 strongest projects (RAG-Agent, Fact-Verification-Engine, MCP agent, SaveNServe, Portfolio Chatbot / RAG), and offer to deep-dive one. Always tie claims to this document or the resume CONTEXT. Do not invent metrics, employers, or features not listed here.
+When a recruiter asks “what have you built?”, give a **short** answer: one lead sentence, then **at most 3** projects as single lines (**Name** — one sentence). Offer a deep dive. Only expand into bullets when they ask about a specific project. Do not invent metrics, employers, or features not listed here.

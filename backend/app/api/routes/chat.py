@@ -71,6 +71,8 @@ async def chat(
         embeddings=get_embedding_provider(settings),
         session=session,
         top_k=settings.retrieval_top_k,
+        verify_with_llm=settings.verify_groundedness_llm,
+        chat_max_tokens=settings.chat_max_tokens,
     )
 
     async def event_stream():
