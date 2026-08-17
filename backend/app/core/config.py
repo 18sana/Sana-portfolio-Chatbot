@@ -33,6 +33,22 @@ class Settings(BaseSettings):
     )
     redis_url: str = Field(default="redis://localhost:6379/0", alias="REDIS_URL")
 
+    @field_validator("database_url", mode="before")
+    @classmethod
+    def normalize_database_url(cls, value: object) -> object:
+        """Accept postgres:// or postgresql:// from Supabase/Render and force asyncpg."""
+        if not isinstance(value, str) or not value:
+            return value
+        url = value.strip()
+        if url.startswith("postgres://"):
+            url = "postgresql://" + url[len("postgres://") :]
+        if url.startswith("postgresql://") and not url.startswith("postgresql+"):
+            url = "postgresql+asyncpg://" + url[len("postgresql://") :]
+        # Supabase usually needs TLS from hosted runtimes
+        if "supabase.co" in url and "ssl=" not in url:
+            url += ("&" if "?" in url else "?") + "ssl=require"
+        return url
+
     # Auth
     admin_api_key: str = Field(default="", alias="ADMIN_API_KEY")
 
