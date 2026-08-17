@@ -113,14 +113,14 @@ export function ChatPanel({ onBookMeet }: Props) {
   }
 
   return (
-    <div className="flex flex-col min-h-[62vh] sm:min-h-[68vh] gap-6">
-      <div className="flex-1 space-y-5">
+    <div className="flex flex-col min-h-[min(62vh,100dvh-10rem)] sm:min-h-[68vh] gap-5 sm:gap-6">
+      <div className="flex-1 space-y-4 sm:space-y-5">
         {messages.length === 0 ? (
-          <div className="rounded-[1.25rem] border border-[var(--line)] bg-[var(--panel)] p-6 sm:p-7 shadow-[var(--shadow)]">
-            <h2 className="font-display text-2xl font-semibold tracking-tight text-[var(--ink)]">
+          <div className="rounded-[1.25rem] border border-[var(--line)] bg-[var(--panel)] p-5 sm:p-7 shadow-[var(--shadow)]">
+            <h2 className="font-display text-xl sm:text-2xl font-semibold tracking-tight text-[var(--ink)]">
               Ask {profile.aiName} anything
             </h2>
-            <p className="mt-2 text-[var(--muted)] leading-relaxed max-w-md">
+            <p className="mt-2 text-sm sm:text-base text-[var(--muted)] leading-relaxed max-w-md">
               Experience, stack, projects, impact — answers stream with sources you can expand.
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
@@ -152,8 +152,8 @@ export function ChatPanel({ onBookMeet }: Props) {
             key={`${msg.role}-${idx}`}
             className={
               msg.role === "user"
-                ? "ml-auto max-w-[90%] sm:max-w-[82%] rounded-2xl rounded-br-md bg-[var(--coral-soft)] px-4 py-3 text-[var(--ink)]"
-                : "mr-auto max-w-[96%] sm:max-w-[92%] rounded-2xl rounded-bl-md border border-[var(--line)] bg-[var(--panel)] px-4 py-3 shadow-sm"
+                ? "ml-auto max-w-[min(100%,22rem)] sm:max-w-[82%] rounded-2xl rounded-br-md bg-[var(--coral-soft)] px-3.5 sm:px-4 py-3 text-[var(--ink)] break-words"
+                : "mr-auto w-full sm:max-w-[92%] rounded-2xl rounded-bl-md border border-[var(--line)] bg-[var(--panel)] px-3.5 sm:px-4 py-3 shadow-sm break-words"
             }
           >
             <div className="text-[0.65rem] uppercase tracking-[0.18em] text-[var(--muted)] mb-1.5">
@@ -161,7 +161,7 @@ export function ChatPanel({ onBookMeet }: Props) {
               {msg.role === "assistant" && msg.grounded === false ? " · needs review" : ""}
             </div>
             <div
-              className={`whitespace-pre-wrap leading-relaxed ${
+              className={`whitespace-pre-wrap leading-relaxed text-[0.95rem] sm:text-base break-words [overflow-wrap:anywhere] ${
                 streaming && idx === messages.length - 1 ? "stream-caret" : ""
               }`}
             >
@@ -181,13 +181,15 @@ export function ChatPanel({ onBookMeet }: Props) {
                         className="w-full text-left px-3 py-2 text-sm flex justify-between gap-3 hover:bg-white transition-colors"
                         onClick={() => setOpenCitation(open ? null : c.chunk_id)}
                       >
-                        <span>{c.section_title || c.source_title || "Source"}</span>
-                        <span className="text-[var(--coral)] text-xs font-semibold">
+                        <span className="min-w-0 truncate">
+                          {c.section_title || c.source_title || "Source"}
+                        </span>
+                        <span className="text-[var(--coral)] text-xs font-semibold shrink-0">
                           {open ? "Hide" : "Show"}
                         </span>
                       </button>
                       {open ? (
-                        <p className="px-3 pb-3 text-sm text-[var(--muted)] leading-relaxed">
+                        <p className="px-3 pb-3 text-sm text-[var(--muted)] leading-relaxed break-words">
                           {c.snippet}
                         </p>
                       ) : null}
@@ -202,7 +204,7 @@ export function ChatPanel({ onBookMeet }: Props) {
 
       <form
         onSubmit={onSubmit}
-        className="sticky bottom-3 sm:bottom-4 rounded-[1.25rem] border border-[var(--line)] bg-[var(--panel)] p-2.5 shadow-[var(--shadow)]"
+        className="sticky bottom-[max(0.75rem,env(safe-area-inset-bottom))] sm:bottom-4 rounded-[1.25rem] border border-[var(--line)] bg-[var(--panel)] p-2 sm:p-2.5 shadow-[var(--shadow)]"
       >
         <div className="flex gap-2 items-end">
           <textarea
@@ -210,9 +212,13 @@ export function ChatPanel({ onBookMeet }: Props) {
             onChange={(e) => setInput(e.target.value)}
             rows={2}
             placeholder="Ask about experience, projects, stack…"
-            className="flex-1 bg-transparent px-3 py-2.5 outline-none resize-none text-[var(--ink)] placeholder:text-[var(--muted)]"
+            className="flex-1 min-w-0 bg-transparent px-2.5 sm:px-3 py-2.5 outline-none resize-none text-[16px] sm:text-base text-[var(--ink)] placeholder:text-[var(--muted)]"
           />
-          <button type="submit" disabled={streaming} className="btn-primary shrink-0">
+          <button
+            type="submit"
+            disabled={streaming}
+            className="btn-primary shrink-0 !min-h-11 !px-4 sm:!px-5"
+          >
             Send
           </button>
         </div>

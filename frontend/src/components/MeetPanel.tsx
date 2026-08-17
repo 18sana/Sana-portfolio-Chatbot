@@ -148,15 +148,15 @@ export function MeetPanel() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <div>
         <p className="text-[0.7rem] uppercase tracking-[0.28em] text-[var(--muted)] mb-2">
           {profile.aiName} · Meet
         </p>
-        <h2 className="font-display text-3xl font-semibold tracking-tight text-[var(--ink)]">
+        <h2 className="font-display text-2xl sm:text-3xl font-semibold tracking-tight text-[var(--ink)]">
           Propose a time
         </h2>
-        <p className="mt-2 text-[var(--muted)] max-w-xl leading-relaxed">
+        <p className="mt-2 text-sm sm:text-base text-[var(--muted)] max-w-xl leading-relaxed">
           We can’t see your calendar from here — pick 1–3 times that work for{" "}
           <em>you</em>. {profile.fullName.split(" ")[0]} confirms one. Times are in{" "}
           {profile.timezone}.
@@ -168,7 +168,7 @@ export function MeetPanel() {
           href={profile.bookingUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="btn-primary"
+          className="btn-primary w-full sm:w-auto"
           initial={reduced ? false : { opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
         >
@@ -190,7 +190,7 @@ export function MeetPanel() {
               required
               value={form.name}
               onChange={(e) => updateField("name", e.target.value)}
-              className="w-full rounded-xl border border-[var(--line)] bg-[var(--bg)] px-3.5 py-2.5 outline-none focus:border-[var(--coral)]"
+              className="w-full rounded-xl border border-[var(--line)] bg-[var(--bg)] px-3.5 py-2.5 outline-none focus:border-[var(--coral)] text-[16px] sm:text-base"
               placeholder="Alex Chen"
             />
           </label>
@@ -202,7 +202,7 @@ export function MeetPanel() {
               type="email"
               value={form.email}
               onChange={(e) => updateField("email", e.target.value)}
-              className="w-full rounded-xl border border-[var(--line)] bg-[var(--bg)] px-3.5 py-2.5 outline-none focus:border-[var(--coral)]"
+              className="w-full rounded-xl border border-[var(--line)] bg-[var(--bg)] px-3.5 py-2.5 outline-none focus:border-[var(--coral)] text-[16px] sm:text-base"
               placeholder="alex@company.com"
             />
           </label>
@@ -213,7 +213,7 @@ export function MeetPanel() {
             <input
               value={form.company}
               onChange={(e) => updateField("company", e.target.value)}
-              className="w-full rounded-xl border border-[var(--line)] bg-[var(--bg)] px-3.5 py-2.5 outline-none focus:border-[var(--coral)]"
+              className="w-full rounded-xl border border-[var(--line)] bg-[var(--bg)] px-3.5 py-2.5 outline-none focus:border-[var(--coral)] text-[16px] sm:text-base"
               placeholder="Acme"
             />
           </label>
@@ -224,7 +224,7 @@ export function MeetPanel() {
             <input
               value={form.role}
               onChange={(e) => updateField("role", e.target.value)}
-              className="w-full rounded-xl border border-[var(--line)] bg-[var(--bg)] px-3.5 py-2.5 outline-none focus:border-[var(--coral)]"
+              className="w-full rounded-xl border border-[var(--line)] bg-[var(--bg)] px-3.5 py-2.5 outline-none focus:border-[var(--coral)] text-[16px] sm:text-base"
               placeholder="Backend / AI platform"
             />
           </label>
@@ -304,12 +304,17 @@ export function MeetPanel() {
           />
         </label>
 
-        <div className="flex flex-wrap gap-3 pt-1">
-          <button type="submit" disabled={!canSend} className="btn-primary">
+        <div className="flex flex-col sm:flex-row flex-wrap gap-3 pt-1">
+          <button type="submit" disabled={!canSend} className="btn-primary w-full sm:w-auto">
             Email proposals
             <span aria-hidden>→</span>
           </button>
-          <button type="button" onClick={onCopy} disabled={!canSend} className="btn-secondary">
+          <button
+            type="button"
+            onClick={onCopy}
+            disabled={!canSend}
+            className="btn-secondary w-full sm:w-auto"
+          >
             {copied ? "Copied" : "Copy briefing"}
           </button>
         </div>

@@ -56,7 +56,7 @@ export default function Home() {
         <section className="relative mx-auto max-w-6xl px-4 sm:px-8 pt-8 sm:pt-14 pb-12 sm:pb-16 grid lg:grid-cols-[1fr_1.05fr] gap-8 lg:gap-14 items-center">
           <div className="max-w-xl">
             <motion.p
-              className="text-[0.7rem] uppercase tracking-[0.32em] text-[var(--muted)] mb-4"
+              className="text-[0.65rem] sm:text-[0.7rem] uppercase tracking-[0.22em] sm:tracking-[0.32em] text-[var(--muted)] mb-4"
               initial={reduced ? false : { opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.45 }}
@@ -65,7 +65,7 @@ export default function Home() {
             </motion.p>
 
             <motion.h1
-              className="font-display font-bold text-[clamp(2.35rem,9vw,4.75rem)] leading-[0.92] tracking-[-0.045em] text-[var(--ink)]"
+              className="font-display font-bold text-[clamp(2.15rem,10vw,4.75rem)] leading-[0.92] tracking-[-0.045em] text-[var(--ink)]"
               initial={reduced ? false : { opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
@@ -75,7 +75,7 @@ export default function Home() {
             </motion.h1>
 
             <motion.p
-              className="mt-5 text-[1.05rem] leading-relaxed text-[var(--muted)] max-w-[36ch]"
+              className="mt-5 text-[1rem] sm:text-[1.05rem] leading-relaxed text-[var(--muted)] max-w-[36ch]"
               initial={reduced ? false : { opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.15 }}
@@ -215,7 +215,7 @@ export default function Home() {
         onModeChange={setMode}
         onBack={() => setEntered(false)}
       />
-      <main className="px-3 sm:px-8 py-5 sm:py-8 max-w-[760px] mx-auto pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+      <main className="px-3 sm:px-8 py-4 sm:py-8 max-w-[760px] mx-auto w-full pb-[max(1.5rem,env(safe-area-inset-bottom))]">
         <AnimatePresence mode="wait">
           <motion.div
             key={mode}

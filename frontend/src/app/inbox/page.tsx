@@ -117,14 +117,14 @@ export default function InboxPage() {
 
   if (!apiKey) {
     return (
-      <div className="min-h-screen px-4 sm:px-8 py-16 max-w-md mx-auto">
+      <div className="min-h-screen px-4 sm:px-8 py-12 sm:py-16 max-w-md mx-auto w-full">
         <p className="text-[0.7rem] uppercase tracking-[0.28em] text-[var(--muted)] mb-2">
           Private
         </p>
-        <h1 className="font-display text-3xl font-semibold tracking-tight text-[var(--ink)]">
+        <h1 className="font-display text-2xl sm:text-3xl font-semibold tracking-tight text-[var(--ink)]">
           Inbox
         </h1>
-        <p className="mt-2 text-[var(--muted)] leading-relaxed">
+        <p className="mt-2 text-sm sm:text-base text-[var(--muted)] leading-relaxed">
           Past visitor chats — only you can open this with your admin key.
         </p>
         <form onSubmit={onUnlock} className="mt-8 space-y-4">
@@ -137,11 +137,11 @@ export default function InboxPage() {
               autoComplete="current-password"
               value={keyInput}
               onChange={(e) => setKeyInput(e.target.value)}
-              className="w-full rounded-xl border border-[var(--line)] bg-[var(--panel)] px-3.5 py-2.5 outline-none focus:border-[var(--coral)]"
+              className="w-full rounded-xl border border-[var(--line)] bg-[var(--panel)] px-3.5 py-2.5 outline-none focus:border-[var(--coral)] text-[16px] sm:text-base"
               placeholder="Your ADMIN_API_KEY"
             />
           </label>
-          <button type="submit" className="btn-primary">
+          <button type="submit" className="btn-primary w-full sm:w-auto">
             Unlock inbox
           </button>
           {error ? <p className="text-sm text-[var(--danger)]">{error}</p> : null}
@@ -155,33 +155,33 @@ export default function InboxPage() {
 
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 z-30 h-16 flex items-center justify-between gap-3 px-4 sm:px-8 border-b border-[var(--line)] bg-[color-mix(in_srgb,var(--bg)_90%,transparent)] backdrop-blur-md">
-        <div>
+      <header className="sticky top-0 z-30 min-h-14 sm:h-16 flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 sm:gap-3 px-3 sm:px-8 py-2 border-b border-[var(--line)] bg-[color-mix(in_srgb,var(--bg)_90%,transparent)] backdrop-blur-md">
+        <div className="min-w-0">
           <div className="font-display font-semibold tracking-tight text-[var(--ink)]">Inbox</div>
-          <div className="text-[0.65rem] uppercase tracking-[0.16em] text-[var(--muted)]">
+          <div className="text-[0.65rem] uppercase tracking-[0.16em] text-[var(--muted)] truncate">
             Private · visitors only you can see
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           <button
             type="button"
-            className="btn-secondary !min-h-9 !px-3 text-sm"
+            className="btn-secondary !min-h-9 !px-2.5 sm:!px-3 text-sm"
             onClick={() => apiKey && fetchList(apiKey)}
             disabled={loading}
           >
-            {loading ? "Refreshing…" : "Refresh"}
+            {loading ? "…" : "Refresh"}
           </button>
-          <button type="button" className="btn-secondary !min-h-9 !px-3 text-sm" onClick={onLock}>
+          <button type="button" className="btn-secondary !min-h-9 !px-2.5 sm:!px-3 text-sm" onClick={onLock}>
             Lock
           </button>
-          <Link href="/" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] px-2">
+          <Link href="/" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] px-1.5 sm:px-2">
             Site
           </Link>
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-4 sm:px-8 py-8 grid lg:grid-cols-[340px_1fr] gap-6">
-        <section className="space-y-3">
+      <main className="mx-auto max-w-6xl px-3 sm:px-8 py-5 sm:py-8 grid lg:grid-cols-[340px_1fr] gap-5 sm:gap-6">
+        <section className={`space-y-3 ${detail ? "hidden lg:block" : ""}`}>
           <h2 className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
             Conversations ({items.length})
           </h2>
@@ -205,8 +205,8 @@ export default function InboxPage() {
                 ].join(" ")}
               >
                 <div className="flex items-center justify-between gap-2 text-xs text-[var(--muted)]">
-                  <span>{formatWhen(item.updated_at)}</span>
-                  <span>{item.message_count} msgs</span>
+                  <span className="truncate">{formatWhen(item.updated_at)}</span>
+                  <span className="shrink-0">{item.message_count} msgs</span>
                 </div>
                 <p className="mt-2 text-sm text-[var(--ink)] line-clamp-2 leading-relaxed">
                   {item.preview || "Empty conversation"}
@@ -219,40 +219,60 @@ export default function InboxPage() {
           </div>
         </section>
 
-        <section className="rounded-[1.25rem] border border-[var(--line)] bg-[var(--panel)] shadow-[var(--shadow)] min-h-[420px]">
+        <section
+          className={`rounded-[1.25rem] border border-[var(--line)] bg-[var(--panel)] shadow-[var(--shadow)] min-h-[320px] sm:min-h-[420px] ${
+            !detail ? "hidden lg:block" : ""
+          }`}
+        >
           {!detail ? (
             <div className="h-full flex items-center justify-center p-8 text-[var(--muted)] text-sm">
               Select a conversation to read the full Q&amp;A.
             </div>
           ) : (
             <div className="flex flex-col h-full">
-              <div className="px-5 py-4 border-b border-[var(--line)] space-y-1">
-                <div className="font-semibold text-[var(--ink)]">Session {detail.session_id}</div>
-                <div className="text-xs text-[var(--muted)]">
-                  {formatWhen(detail.created_at)} → {formatWhen(detail.updated_at)}
-                  {detail.client_ip ? ` · IP ${detail.client_ip}` : ""}
+              <div className="px-4 sm:px-5 py-3 sm:py-4 border-b border-[var(--line)] space-y-1">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="font-semibold text-[var(--ink)] truncate">
+                      Session {detail.session_id}
+                    </div>
+                    <div className="text-xs text-[var(--muted)] break-words">
+                      {formatWhen(detail.created_at)} → {formatWhen(detail.updated_at)}
+                      {detail.client_ip ? ` · IP ${detail.client_ip}` : ""}
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    className="lg:hidden shrink-0 text-sm font-semibold text-[var(--coral)]"
+                    onClick={() => {
+                      setDetail(null);
+                      setSelectedId(null);
+                    }}
+                  >
+                    ← List
+                  </button>
                 </div>
               </div>
-              <div className="p-5 space-y-4 overflow-y-auto max-h-[70vh]">
+              <div className="p-3.5 sm:p-5 space-y-4 overflow-y-auto max-h-[70vh]">
                 {detail.messages.map((msg) => (
                   <article
                     key={msg.id}
                     className={
                       msg.role === "user"
-                        ? "ml-8 rounded-2xl rounded-br-md bg-[var(--coral-soft)] px-4 py-3"
-                        : "mr-4 rounded-2xl rounded-bl-md border border-[var(--line)] bg-white px-4 py-3"
+                        ? "ml-4 sm:ml-8 rounded-2xl rounded-br-md bg-[var(--coral-soft)] px-3.5 sm:px-4 py-3 break-words"
+                        : "mr-2 sm:mr-4 rounded-2xl rounded-bl-md border border-[var(--line)] bg-white px-3.5 sm:px-4 py-3 break-words"
                     }
                   >
-                    <div className="text-[0.65rem] uppercase tracking-[0.16em] text-[var(--muted)] mb-1.5 flex justify-between gap-3">
+                    <div className="text-[0.65rem] uppercase tracking-[0.16em] text-[var(--muted)] mb-1.5 flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-3">
                       <span>
                         {msg.role === "user" ? "Visitor" : "Ash"}
                         {msg.role === "assistant" && msg.grounded === false
                           ? " · needs review"
                           : ""}
                       </span>
-                      <span>{formatWhen(msg.created_at)}</span>
+                      <span className="normal-case tracking-normal">{formatWhen(msg.created_at)}</span>
                     </div>
-                    <div className="whitespace-pre-wrap text-sm leading-relaxed text-[var(--ink)]">
+                    <div className="whitespace-pre-wrap text-sm leading-relaxed text-[var(--ink)] break-words [overflow-wrap:anywhere]">
                       {msg.content}
                     </div>
                   </article>

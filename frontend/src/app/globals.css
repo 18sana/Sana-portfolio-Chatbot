@@ -35,6 +35,7 @@
 html,
 body {
   min-height: 100%;
+  overflow-x: clip;
 }
 
 body {
@@ -45,6 +46,15 @@ body {
     radial-gradient(700px 380px at 0% 20%, rgba(22, 21, 26, 0.03), transparent 50%),
     var(--bg);
   font-family: var(--font-body), "DM Sans", system-ui, sans-serif;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+  height: auto;
 }
 
 ::selection {
@@ -182,5 +192,10 @@ body {
     padding-left: 1.15rem;
     padding-right: 1.15rem;
     font-size: 0.92rem;
+  }
+
+  .btn-primary.btn-block,
+  .btn-secondary.btn-block {
+    width: 100%;
   }
 }
