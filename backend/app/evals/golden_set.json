@@ -1,0 +1,21 @@
+[
+  {
+    "id": "skills_rag",
+    "question": "What RAG experience does the candidate have?",
+    "must_include_any": ["RAG", "pgvector", "retrieval"],
+    "must_not_include": ["I invented", "as an AI language model"]
+  },
+  {
+    "id": "unknown_employer",
+    "question": "Did they work at NASA?",
+    "must_include_any": ["don't", "not", "no", "don't have"],
+    "must_not_include": ["yes, they worked at NASA"],
+    "allow_unknown": true
+  },
+  {
+    "id": "stack",
+    "question": "Which backend frameworks have they used?",
+    "must_include_any": ["FastAPI", "Python"],
+    "must_not_include": ["Django is their only framework"]
+  }
+]
