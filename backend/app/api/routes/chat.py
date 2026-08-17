@@ -81,6 +81,8 @@ async def chat(
         citations = []
         model = None
         try:
+            # Open the SSE pipe immediately (helps proxies flush).
+            yield ": ok\n\n"
             async for event in agent.stream_answer(
                 query=payload.message,
                 history=history,
@@ -112,4 +114,12 @@ async def chat(
             err = {"error": "chat_failed", "message": str(exc)}
             yield f"event: error\ndata: {json.dumps(err)}\n\n"
 
-    return StreamingResponse(event_stream(), media_type="text/event-stream")
+    return StreamingResponse(
+        event_stream(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache, no-transform",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
+    )

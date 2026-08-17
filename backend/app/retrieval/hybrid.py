@@ -3,12 +3,17 @@
 from __future__ import annotations
 
 import uuid
+from collections import OrderedDict
 from dataclasses import dataclass
 
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.providers.base import EmbeddingProvider
+
+# ponytail: in-process embed cache — ceiling ~128 queries; upgrade to Redis if multi-worker.
+_EMBED_CACHE: OrderedDict[str, list[float]] = OrderedDict()
+_EMBED_CACHE_MAX = 128
 
 
 @dataclass(frozen=True, slots=True)
@@ -27,23 +32,33 @@ async def hybrid_search(
     *,
     query: str,
     embedding_provider: EmbeddingProvider,
-    top_k: int = 8,
+    top_k: int = 4,
     vector_weight: float = 0.6,
     text_weight: float = 0.4,
-    candidate_pool: int = 20,
+    candidate_pool: int | None = None,
 ) -> list[RetrievedChunk]:
     """Retrieve chunks with Reciprocal Rank Fusion over vector + FTS rankings."""
     if not query.strip():
         return []
 
-    emb = await embedding_provider.embed([query])
-    if not emb.vectors:
-        return []
-    query_vec = emb.vectors[0]
+    cache_key = query.strip().lower()
+    query_vec = _EMBED_CACHE.get(cache_key)
+    if query_vec is None:
+        emb = await embedding_provider.embed([query])
+        if not emb.vectors:
+            return []
+        query_vec = emb.vectors[0]
+        _EMBED_CACHE[cache_key] = query_vec
+        while len(_EMBED_CACHE) > _EMBED_CACHE_MAX:
+            _EMBED_CACHE.popitem(last=False)
+    else:
+        _EMBED_CACHE.move_to_end(cache_key)
+
     # asyncpg wants string form for vector cast
     vec_literal = "[" + ",".join(str(float(x)) for x in query_vec) + "]"
 
-    pool = max(top_k, candidate_pool)
+    pool = candidate_pool if candidate_pool is not None else max(top_k * 2, 8)
+    pool = max(top_k, pool)
     sql = text(
         """
         WITH vector_hits AS (

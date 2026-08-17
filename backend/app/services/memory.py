@@ -24,7 +24,7 @@ async def get_or_create_conversation(session: AsyncSession, session_id: str) -> 
     return convo
 
 
-def windowed_history(messages: list[Message], *, window: int = 8) -> list[ChatMessage]:
+def windowed_history(messages: list[Message], *, window: int = 4) -> list[ChatMessage]:
     recent = messages[-window:]
     return [{"role": m.role, "content": m.content} for m in recent if m.role in {"user", "assistant"}]
 

@@ -166,7 +166,7 @@ export function ChatPanel({ onBookMeet }: Props) {
                 streaming && idx === messages.length - 1 ? "stream-caret" : ""
               }`}
             >
-              {msg.content}
+              {msg.content || (streaming && idx === messages.length - 1 ? " " : "")}
             </div>
             {msg.citations && msg.citations.length > 0 ? (
               <div className="mt-3">

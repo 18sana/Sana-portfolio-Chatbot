@@ -13,6 +13,19 @@ Sana Asiwal builds full-stack products and AI agent systems: RAG platforms, mult
 
 ---
 
+
+## Skills / technical stack
+
+Sana’s technical stack (from her projects and professional work):
+
+Languages: Python, TypeScript, JavaScript, SQL
+AI / agents: LangGraph, LangChain, RAG pipelines, MCP (Model Context Protocol), embeddings, hybrid retrieval, grounded generation, agent evaluation
+Backend: FastAPI, Node/Express (MERN), REST APIs, Auth.js
+Frontend: Next.js, React, TypeScript, Tailwind CSS
+Data / infra: PostgreSQL, pgvector, Neo4j, Redis, Prisma, Chroma
+MLOps / quality: MLflow, Vitest, CI lint/type/test pipelines
+Domains: enterprise RAG, multi-agent systems, AI governance / tool calling, full-stack product engineering, blockchain indexing & DeFi tooling (Syvora work)
+
 ## Flagship AI / Agents projects
 
 ### RAG-Agent

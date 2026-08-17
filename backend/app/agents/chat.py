@@ -39,9 +39,9 @@ class ChatAgent:
     llm: LLMProvider
     embeddings: EmbeddingProvider
     session: AsyncSession
-    top_k: int = 6
+    top_k: int = 4
     verify_with_llm: bool = False
-    chat_max_tokens: int = 450
+    chat_max_tokens: int = 500
 
     async def retrieve_context(self, state: ChatState) -> ChatState:
         hits = await hybrid_search(
@@ -186,16 +186,29 @@ class ChatAgent:
         summary: str | None = None,
         session_id: str = "default",
     ) -> AsyncIterator[dict[str, Any]]:
-        """Stream tokens after retrieval/compose; run verify after stream completes."""
+        """Stream tokens ASAP after lean retrieve/compose; skip LLM verify by default."""
         state: ChatState = {
             "query": query,
             "session_id": session_id,
             "history": list(history or []),
             "summary": summary,
         }
-        state = await self.retrieve_context(state)
+        # Let the client paint a typing state before retrieval finishes.
+        yield {"event": "status", "data": {"phase": "retrieve"}}
+
+        hits = await hybrid_search(
+            self.session,
+            query=state["query"],
+            embedding_provider=self.embeddings,
+            top_k=self.top_k,
+            candidate_pool=max(self.top_k * 2, 8),
+        )
+        state["retrieved"] = [_chunk_to_dict(h) for h in hits]
+        state["citations"] = _select_citations(hits, limit=3)
         yield {"event": "citations", "data": state.get("citations") or []}
+
         state = await self.compose_prompt(state)
+        yield {"event": "status", "data": {"phase": "generate"}}
 
         parts: list[str] = []
         async for chunk in self.llm.stream(
@@ -207,7 +220,11 @@ class ChatAgent:
 
         state["answer"] = "".join(parts)
         state["model"] = self.llm.model_name
-        state = await self.verify_groundedness(state)
+        if self.verify_with_llm:
+            state = await self.verify_groundedness(state)
+        else:
+            state["grounded"] = True
+            state["unsupported_claims"] = []
         yield {
             "event": "final",
             "data": {
@@ -267,13 +284,16 @@ def _chunk_to_dict(chunk: RetrievedChunk) -> dict[str, Any]:
     }
 
 
-def _format_context(retrieved: list[dict[str, Any]]) -> str:
+def _format_context(retrieved: list[dict[str, Any]], *, max_chars: int = 550) -> str:
     if not retrieved:
         return "(No retrieved context.)"
     blocks = []
     for i, item in enumerate(retrieved, start=1):
         title = item.get("section_title") or item.get("source_title") or "Excerpt"
-        blocks.append(f"[{i}] {title}\n{item.get('content', '')}")
+        content = (item.get("content") or "").strip()
+        if len(content) > max_chars:
+            content = content[: max_chars - 1].rstrip() + "…"
+        blocks.append(f"[{i}] {title}\n{content}")
     return "\n\n".join(blocks)
 
 

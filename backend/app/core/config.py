@@ -57,10 +57,10 @@ class Settings(BaseSettings):
     rate_limit_ip_per_minute: int = Field(default=60, alias="RATE_LIMIT_IP_PER_MINUTE")
     rate_limit_session_per_minute: int = Field(default=30, alias="RATE_LIMIT_SESSION_PER_MINUTE")
     rate_limit_jd_per_minute: int = Field(default=10, alias="RATE_LIMIT_JD_PER_MINUTE")
-    retrieval_top_k: int = Field(default=6, alias="RETRIEVAL_TOP_K")
+    retrieval_top_k: int = Field(default=4, alias="RETRIEVAL_TOP_K")
     # Extra LLM verify after each answer (slower). Heuristic still runs when False.
     verify_groundedness_llm: bool = Field(default=False, alias="VERIFY_GROUNDEDNESS_LLM")
-    chat_max_tokens: int = Field(default=450, alias="CHAT_MAX_TOKENS")
+    chat_max_tokens: int = Field(default=500, alias="CHAT_MAX_TOKENS")
 
     # LLM
     llm_provider: str = Field(default="openai", alias="LLM_PROVIDER")
