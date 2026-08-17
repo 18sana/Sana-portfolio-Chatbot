@@ -22,9 +22,10 @@ type Msg = {
 const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
 
 const SUGGESTIONS = [
-  "What have you built?",
-  "Tell me about RAG-Agent",
-  "What’s your strongest AI project?",
+  "Summarize her professional background",
+  "Which roles is she strongest for?",
+  "Describe a project with measurable impact",
+  "What is her technical stack?",
 ];
 
 type Props = {
@@ -121,7 +122,7 @@ export function ChatPanel({ onBookMeet }: Props) {
               Ask {profile.aiName} anything
             </h2>
             <p className="mt-2 text-sm sm:text-base text-[var(--muted)] leading-relaxed max-w-md">
-              Experience, stack, projects, impact — answers stream with sources you can expand.
+              Ask about experience, role fit, or impact — concise answers with sources.
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
               {SUGGESTIONS.map((q) => (
