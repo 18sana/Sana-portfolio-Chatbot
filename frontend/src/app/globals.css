@@ -164,3 +164,23 @@ body {
     animation: none;
   }
 }
+
+
+/* Mobile polish */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .btn-primary,
+  .btn-secondary {
+    min-height: 2.75rem;
+    padding-left: 1.15rem;
+    padding-right: 1.15rem;
+    font-size: 0.92rem;
+  }
+}

@@ -23,8 +23,8 @@ const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
 
 const SUGGESTIONS = [
   "What have you built?",
-  "What’s your stack?",
   "Tell me about RAG-Agent",
+  "What’s your strongest AI project?",
 ];
 
 type Props = {
@@ -113,7 +113,7 @@ export function ChatPanel({ onBookMeet }: Props) {
   }
 
   return (
-    <div className="flex flex-col min-h-[68vh] gap-6">
+    <div className="flex flex-col min-h-[62vh] sm:min-h-[68vh] gap-6">
       <div className="flex-1 space-y-5">
         {messages.length === 0 ? (
           <div className="rounded-[1.25rem] border border-[var(--line)] bg-[var(--panel)] p-6 sm:p-7 shadow-[var(--shadow)]">
@@ -152,8 +152,8 @@ export function ChatPanel({ onBookMeet }: Props) {
             key={`${msg.role}-${idx}`}
             className={
               msg.role === "user"
-                ? "ml-auto max-w-[82%] rounded-2xl rounded-br-md bg-[var(--coral-soft)] px-4 py-3 text-[var(--ink)]"
-                : "mr-auto max-w-[92%] rounded-2xl rounded-bl-md border border-[var(--line)] bg-[var(--panel)] px-4 py-3 shadow-sm"
+                ? "ml-auto max-w-[90%] sm:max-w-[82%] rounded-2xl rounded-br-md bg-[var(--coral-soft)] px-4 py-3 text-[var(--ink)]"
+                : "mr-auto max-w-[96%] sm:max-w-[92%] rounded-2xl rounded-bl-md border border-[var(--line)] bg-[var(--panel)] px-4 py-3 shadow-sm"
             }
           >
             <div className="text-[0.65rem] uppercase tracking-[0.18em] text-[var(--muted)] mb-1.5">
@@ -202,7 +202,7 @@ export function ChatPanel({ onBookMeet }: Props) {
 
       <form
         onSubmit={onSubmit}
-        className="sticky bottom-4 rounded-[1.25rem] border border-[var(--line)] bg-[var(--panel)] p-2.5 shadow-[var(--shadow)]"
+        className="sticky bottom-3 sm:bottom-4 rounded-[1.25rem] border border-[var(--line)] bg-[var(--panel)] p-2.5 shadow-[var(--shadow)]"
       >
         <div className="flex gap-2 items-end">
           <textarea

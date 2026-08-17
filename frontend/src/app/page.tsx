@@ -53,7 +53,7 @@ export default function Home() {
 
         <SiteHeader name={appName} />
 
-        <section className="relative mx-auto max-w-6xl px-5 sm:px-8 pt-10 sm:pt-14 pb-16 grid lg:grid-cols-[1fr_1.05fr] gap-10 lg:gap-14 items-center">
+        <section className="relative mx-auto max-w-6xl px-4 sm:px-8 pt-8 sm:pt-14 pb-12 sm:pb-16 grid lg:grid-cols-[1fr_1.05fr] gap-8 lg:gap-14 items-center">
           <div className="max-w-xl">
             <motion.p
               className="text-[0.7rem] uppercase tracking-[0.32em] text-[var(--muted)] mb-4"
@@ -65,7 +65,7 @@ export default function Home() {
             </motion.p>
 
             <motion.h1
-              className="font-display font-bold text-[clamp(2.75rem,8vw,4.75rem)] leading-[0.92] tracking-[-0.045em] text-[var(--ink)]"
+              className="font-display font-bold text-[clamp(2.35rem,9vw,4.75rem)] leading-[0.92] tracking-[-0.045em] text-[var(--ink)]"
               initial={reduced ? false : { opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
@@ -85,18 +85,18 @@ export default function Home() {
             </motion.p>
 
             <motion.div
-              className="mt-8 flex flex-wrap gap-3"
+              className="mt-8 flex flex-col sm:flex-row flex-wrap gap-3"
               initial={reduced ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.24 }}
             >
-              <button type="button" className="btn-primary" onClick={() => setEntered(true)}>
+              <button type="button" className="btn-primary w-full sm:w-auto" onClick={() => setEntered(true)}>
                 Talk to {profile.aiName}
                 <span aria-hidden>→</span>
               </button>
               <button
                 type="button"
-                className="btn-secondary"
+                className="btn-secondary w-full sm:w-auto"
                 onClick={() => {
                   setMode("meet");
                   setEntered(true);
@@ -142,7 +142,7 @@ export default function Home() {
           </div>
 
           <motion.div
-            className="relative"
+            className="relative mt-2 lg:mt-0"
             initial={reduced ? false : { opacity: 0, x: 24 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.18 }}
@@ -157,14 +157,14 @@ export default function Home() {
                 <span className="text-xs text-[var(--muted)]">Grounded · live</span>
               </div>
 
-              <div className="p-4 sm:p-5 space-y-3.5 min-h-[360px]">
+              <div className="p-3.5 sm:p-5 space-y-3.5 min-h-[280px] sm:min-h-[360px]">
                 {PREVIEW.map((msg, i) => (
                   <motion.div
                     key={`${msg.role}-${i}`}
                     className={
                       msg.role === "user"
-                        ? "ml-8 rounded-2xl rounded-br-md bg-[var(--coral-soft)] px-3.5 py-2.5 text-sm text-[var(--ink)]"
-                        : "mr-4 rounded-2xl rounded-bl-md border border-[var(--line)] bg-white px-3.5 py-2.5 text-sm text-[var(--ink-soft)] leading-relaxed"
+                        ? "ml-4 sm:ml-8 rounded-2xl rounded-br-md bg-[var(--coral-soft)] px-3.5 py-2.5 text-sm text-[var(--ink)]"
+                        : "mr-2 sm:mr-4 rounded-2xl rounded-bl-md border border-[var(--line)] bg-white px-3.5 py-2.5 text-sm text-[var(--ink-soft)] leading-relaxed"
                     }
                     initial={reduced ? false : { opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -215,7 +215,7 @@ export default function Home() {
         onModeChange={setMode}
         onBack={() => setEntered(false)}
       />
-      <main className="px-4 sm:px-8 py-8 max-w-[760px] mx-auto">
+      <main className="px-3 sm:px-8 py-5 sm:py-8 max-w-[760px] mx-auto pb-[max(1.5rem,env(safe-area-inset-bottom))]">
         <AnimatePresence mode="wait">
           <motion.div
             key={mode}
